@@ -1,0 +1,26 @@
+---
+# tasks file for APACHxE
+- name : Install Apache
+  yum : 
+    name : httpd
+    state : latest
+
+- name : Copy Config Files
+  template :
+    src: httpd.conf.j2
+    dest: /etc/httpd/conf/httpd.conf    
+
+- name: Create a directory if it does not exist
+  file :
+    path: "{{ DOCUMENTROOT }}" 
+    state: directory
+ 
+- name : "Copy Index File"
+  template :
+    src: index.html.j2
+    dest: "{{ DOCUMENTROOT }}/index.html"
+
+- name: Start service httpd, if not started
+  service :
+    name : httpd
+    state : restarted 
